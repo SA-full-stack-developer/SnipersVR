@@ -11,15 +11,25 @@ public class PlayerMovement : MonoBehaviour {
 
     //GameObjects
     public GameObject leftHand;
-    private Transform pointToMoveSprite;
+    public GameObject vrCamera;
+    public GameObject body;
 
+    private GameObject parentCamera;
+    private Transform pointToMoveSprite;
+    
     //RAYCAST
     private RaycastHit hitFloor;
     private Vector3 fwd;
+    private Vector3 punto;
+
+    //FLAGS
+    private bool startMovement = false;
+    private bool moving = false;
 
     private void Awake() {
         mTrackedObject = GetComponent<SteamVR_TrackedObject>();
         pointToMoveSprite = GameObject.Find("crosshair_go").transform;
+        parentCamera = transform.parent.gameObject;
     }
 
     private void Update() {
@@ -33,13 +43,39 @@ public class PlayerMovement : MonoBehaviour {
                 if (!pointToMoveSprite.GetComponent<SpriteRenderer>().enabled) //Si no se ve indicador
                     pointToMoveSprite.GetComponent<SpriteRenderer>().enabled = true; // Se activa
 
+                punto = new Vector3(hitFloor.point.x, body.transform.position.y, hitFloor.point.z);
+                startMovement = true;
+
                 pointToMoveSprite.position = new Vector3(hitFloor.point.x, hitFloor.point.y + 0.1f, hitFloor.point.z);
             } else { //Si no choca contra el suelo
                 if (pointToMoveSprite.GetComponent<SpriteRenderer>().enabled) //Si esta activo el indicador
                     pointToMoveSprite.GetComponent<SpriteRenderer>().enabled = false;//se desactiva
+
+                startMovement = false;
             }
         } else {
             pointToMoveSprite.GetComponent<SpriteRenderer>().enabled = false;//se desactiva
+
+            if (startMovement) {
+                startMovement = false;
+                moving = true;
+            }
+        }
+
+        if (moving) {
+            move();
+        }
+    }
+
+    private void move() {
+        float step = 1 * Time.deltaTime;
+        body.transform.position = Vector3.MoveTowards(body.transform.position, punto, step);
+
+        if (body.transform.position.x == punto.x && body.transform.position.z == punto.z) {
+            moving = false;
+            vrCamera.transform.parent = parentCamera.transform;
+            vrCamera.transform.localPosition = new Vector3(0, 0, -0.07f);
+            vrCamera.transform.localEulerAngles = transform.forward;
         }
     }
 }
