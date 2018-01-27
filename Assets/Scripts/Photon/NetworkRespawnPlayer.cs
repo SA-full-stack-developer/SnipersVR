@@ -6,11 +6,14 @@ public class NetworkRespawnPlayer : MonoBehaviour {
     [SerializeField]
     string version;
     [SerializeField]
-    GameObject positionGroup1;
+    Transform position1;
+    [SerializeField]
+    Transform position2;
+    /*GameObject positionGroup1;
     [SerializeField]
     GameObject positionGroup2;
     [SerializeField]
-    GameObject positionGroup3;
+    GameObject positionGroup3;*/
 
     GameObject player1;
     GameObject player2;
@@ -28,7 +31,7 @@ public class NetworkRespawnPlayer : MonoBehaviour {
 
     private void Update() {
         //Cambiar a personaje 1
-        if (Input.GetKeyDown("1")) {
+        /*if (Input.GetKeyDown("1")) {
             player1.GetComponent<PlayerSetup>().enabledAll();
             player2.GetComponent<PlayerSetup>().disabledAll();
             player3.GetComponent<PlayerSetup>().disabledAll();
@@ -54,36 +57,42 @@ public class NetworkRespawnPlayer : MonoBehaviour {
             } else if (player2.GetComponentsInChildren<Camera>()[0].enabled) {
             } else if (player3.GetComponentsInChildren<Camera>()[0].enabled) {
             }
-        }
+        }*/
     }
 
     private void OnJoinedRoom() {
         Transform[] positions;
 
         if (PhotonNetwork.otherPlayers.Length == 0) { //Somos los primeros en entrar al servidor
-            positions = positionGroup1.GetComponentsInChildren<Transform>();
+            positions = position1.GetComponentsInChildren<Transform>();
+            player1 = PhotonNetwork.Instantiate("VRSimulatorCameraRig", position1.transform.position, position1.transform.rotation, 0);
+            player1.GetComponent<PlayerSetup>().enabledAll();
+            /*positions = positionGroup1.GetComponentsInChildren<Transform>();
             player1 = PhotonNetwork.Instantiate("Player1", positions[1].transform.position, positions[0].transform.rotation, 0);
             player2 = PhotonNetwork.Instantiate("Player2", positions[2].transform.position, positions[1].transform.rotation, 0);
             player3 = PhotonNetwork.Instantiate("Player3", positions[3].transform.position, positions[2].transform.rotation, 0);
             player1.GetComponent<PlayerSetup>().enabledAll();
             player2.GetComponent<PlayerSetup>().disabledAll();
-            player3.GetComponent<PlayerSetup>().disabledAll();
+            player3.GetComponent<PlayerSetup>().disabledAll();*/
         }else if(PhotonNetwork.otherPlayers.Length == 1) {
-            positions = positionGroup2.GetComponentsInChildren<Transform>();
+            positions = position2.GetComponentsInChildren<Transform>();
+            player1 = PhotonNetwork.Instantiate("VRSimulatorCameraRig", position2.transform.position, position2.transform.rotation, 0);
+            player1.GetComponent<PlayerSetup>().enabledAll();
+            /*positions = positionGroup2.GetComponentsInChildren<Transform>();
             player1 = PhotonNetwork.Instantiate("Player1", positions[1].transform.position, positions[0].transform.rotation, 0);
             player2 = PhotonNetwork.Instantiate("Player2", positions[2].transform.position, positions[1].transform.rotation, 0);
             player3 = PhotonNetwork.Instantiate("Player3", positions[3].transform.position, positions[2].transform.rotation, 0);
             player1.GetComponent<PlayerSetup>().enabledAll();
             player2.GetComponent<PlayerSetup>().disabledAll();
-            player3.GetComponent<PlayerSetup>().disabledAll();
+            player3.GetComponent<PlayerSetup>().disabledAll();*/
         } else { //Si no lo somos
-            positions = positionGroup3.GetComponentsInChildren<Transform>();
+            /*positions = positionGroup3.GetComponentsInChildren<Transform>();
             player1 = PhotonNetwork.Instantiate("Player1", positions[1].transform.position, positions[0].transform.rotation, 0);
             player2 = PhotonNetwork.Instantiate("Player2", positions[2].transform.position, positions[1].transform.rotation, 0);
             player3 = PhotonNetwork.Instantiate("Player3", positions[3].transform.position, positions[2].transform.rotation, 0);
             player1.GetComponent<PlayerSetup>().enabledAll();
             player2.GetComponent<PlayerSetup>().disabledAll();
-            player3.GetComponent<PlayerSetup>().disabledAll();
+            player3.GetComponent<PlayerSetup>().disabledAll();*/
         }
 
     }

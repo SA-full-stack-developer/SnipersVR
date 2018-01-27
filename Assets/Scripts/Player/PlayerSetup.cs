@@ -24,7 +24,7 @@ public class PlayerSetup : MonoBehaviour {
     //Habilitar todos los componentes del personaje que no se estén utilizando
     public void enabledAll() {
         for (int i = 0; i < componentsToDisabled.Length; i++) {
-            //componentsToDisabled[i].enabled = true;
+            componentsToDisabled[i].enabled = true;
         }
     }
 
